@@ -7,6 +7,17 @@ package com.revature;
  * 2. Implement the Runnable interface (preferred)
  * 		- Create class and implement
  * 		- Runnable is a functional interface, so we can use a lambda
+ * 
+ * Final in Java -
+ * 	Can apply to:
+ * 		1. Variable declaration - Variable cannot be reassigned
+ * 		2. Method parameter - Variable cannot be reassigned
+ * 		3. Method signature - Method cannot be overridden
+ * 		4. Class definition - Class cannot be extended
+ * 
+ * 			* Abstract class and interfaces cannot be marked final
+ * 
+ * 
  */
 public class BasicThreading {
 	
@@ -31,8 +42,9 @@ public class BasicThreading {
 		
 		// infers that parameters are passed to method
 		//		System.out::println
-		Thread thread = new Thread(runnable);
-		thread.start();
+//		Thread thread = new Thread(runnable);
+		Thread thread = new Thread(() -> System.out.println("Hello"));
+		thread.start();		
 	}
 	
 	public static void runnableExample() {
@@ -40,8 +52,18 @@ public class BasicThreading {
 		myThread.start();
 	}
 	
+	public static void noClosures() {
+		int x = 10;
+		x++;
+		Thread thread = new Thread(() ->  {
+			// Can't interact with x because it is not final or 'effectively final'
+//			System.out.println(x);
+		});
+	}
+	
 	public static void main(String[] args) {
-		lambdaExample();
+		noClosures();
+//		Sample sample = new Sample((x) -> {}); 
 	}
 }
 
@@ -90,6 +112,22 @@ class RunnableThread implements Runnable {
 			System.out.print(i + " ");
 		}
 	}	
+}
+
+class Sample {
+	
+	Sample(Runnable runnable) {
+		System.out.println("Runnable");
+	}
+	
+	Sample(SomeInterface someInterface) {
+		System.out.println("some interface");
+	}
+}
+
+interface SomeInterface {
+	
+	void doStuff(int x);
 }
 
 
